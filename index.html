@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sinh nhật cụa vợ iu</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-image: url('https://i.imgur.com/nQUKzm4.jpeg');
+            background-size: contain;
+            background-position: center;
+            background-repeat: no-repeat;
+            margin: 0;
+            flex-direction: column;
+            background-color: rgb(107, 27, 27);
+            overflow: hidden;
+        }
+
+        .background-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 20px;
+            z-index: 1;
+        }
+
+        .heart-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .heart {
+            width: 100px;
+            height: 100px;
+            background-color: rgb(221, 132, 166);
+            position: relative;
+            transform: rotate(-45deg);
+            animation: heartbeat 1s infinite;
+            margin-top: -10px;
+            will-change: transform;
+        }
+
+        .heart::before,
+        .heart::after {
+            content: "";
+            width: 100px;
+            height: 100px;
+            background-color: rgb(221, 132, 166);
+            border-radius: 50%;
+            position: absolute;
+        }
+
+        .heart::before {
+            top: -50px;
+            left: 0;
+        }
+
+        .heart::after {
+            left: 50px;
+            top: 0;
+        }
+
+        @keyframes heartbeat {
+            0%, 100% { transform: scale(1) rotate(-45deg); }
+            50% { transform: scale(1.2) rotate(-45deg); }
+        }
+
+        .text {
+            font-family: Optima, Segoe;
+            font-size: 30px;
+            color: rgb(161, 26, 26);
+            text-align: center;
+            margin-bottom: 400px;
+            z-index: 2;
+            padding: 5px;
+            border: 2px solid rgb(161, 26, 26);
+            border-radius: 5px;
+            background-color: rgba(255, 255, 255, 0.7);
+            animation: text-blink 1s infinite;
+        }
+
+        @keyframes text-blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .open-letter-btn {
+            position: absolute;
+            top: 50%;
+            right: 10%;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            border: none;
+            background-color: rgb(161, 26, 26);
+            color: rgb(255, 255, 255);
+            border-radius: 5px;
+            z-index: 1;
+        }
+
+        /* Overlay lớp nền tối mà không làm mờ dải sắc màu */
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            display: none;
+            z-index: 5;
+        }
+
+        .popup {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0.8);
+            width: 300px;
+            padding: 20px;
+            background-color: rgb(250, 184, 236);
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            z-index: 10;
+            display: none;
+            opacity: 0;
+            will-change: transform, opacity;
+        }
+
+        .popup.show {
+            display: block;
+            opacity: 1;
+            transform: translate(-50%, -50%) scale(1);
+        }
+
+        .letter-text {
+            font-size: 16px;
+            color: rgb(107, 27, 27);
+            text-align: center;
+            margin: 0;
+        }
+
+        .close-btn {
+            margin-top: 10px;
+            padding: 5px 10px;
+            font-size: 14px;
+            background-color: rgb(161, 26, 26);
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+
+        .confetti {
+            position: fixed;
+            top: 0;
+            width: 10px;
+            height: 10px;
+            background-color: red;
+            border-radius: 50%;
+            pointer-events: none;
+            animation: fall linear infinite;
+            z-index: 6;
+            will-change: transform;
+        }
+
+        @keyframes fall {
+            0% { transform: translateY(0); opacity: 1; }
+            100% { transform: translateY(100vh); opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+    <div class="background-content">
+        <div class="heart-container">
+            <div class="text">Chúc mừng sinh nhật vợ yêuuuuuuuuu ❤</div>
+            <div class="heart"></div>
+        </div>
+    </div>
+
+    <button class="open-letter-btn" onclick="openPopup()">Bấm dô đuy vợ</button>
+    <div class="overlay" id="overlay" onclick="closePopup()"></div>
+    <div class="popup" id="popup">
+        <h3>From: chồng iem</h3>
+        <p class="letter-text">Chúc vợ yêu một ngày sinh nhật thật vui vẻ, tràn đầy hạnh phúc và nhiều niềm vui bên gia đình và bạn bè và với anh nữa, anh với vợ iu nhau hơn 2 năm ời đóooo. Tụi mình phải thật cố gắng nhéeee. Mong là món quà này sẽ làm em bé bất ngờ, còn món quà anh ship qa nữa mong là em bé cũng thích nóoo hjhjjjj. Anh yêu vợ nhiềuuuu lắmmmmmmm. Love youu baeee❤</p>
+        <button class="close-btn" onclick="closePopup()">Đóng</button>
+    </div>
+
+    <script>
+        function openPopup() {
+            document.getElementById('overlay').style.display = 'block';
+            document.getElementById('popup').classList.add('show');
+            createConfetti();
+        }
+
+        function closePopup() {
+            document.getElementById('overlay').style.display = 'none';
+            document.getElementById('popup').classList.remove('show');
+        }
+
+        function getRandomColor() {
+            const colors = ['#FFC0CB', '#FFD700', '#00FF7F', '#FF4500', '#1E90FF'];
+            return colors[Math.floor(Math.random() * colors.length)];
+        }
+
+        function createConfetti() {
+            let count = 0;
+            const maxConfetti = 10;
+
+            function addConfetti() {
+                if (count >= maxConfetti) return;
+
+                const confetti = document.createElement('div');
+                confetti.classList.add('confetti');
+                confetti.style.left = `${Math.random() * 100}vw`;
+                confetti.style.backgroundColor = getRandomColor();
+                confetti.style.animationDuration = `${Math.random() * 2 + 3}s`;
+                document.body.appendChild(confetti);
+
+                confetti.addEventListener('animationend', () => confetti.remove());
+
+                count++;
+                requestAnimationFrame(addConfetti);
+            }
+
+            requestAnimationFrame(addConfetti);
+        }
+    </script>
+</body>
+</html>
