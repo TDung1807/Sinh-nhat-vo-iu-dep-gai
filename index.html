@@ -10,7 +10,7 @@
             justify-content: center;
             align-items: center;
             height: 100vh;
-            background-image: url('https://i.imgur.com/nQUKzm4.jpeg');
+            background-image: url('images/photo.webp');
             background-size: contain;
             background-position: center;
             background-repeat: no-repeat;
@@ -103,7 +103,6 @@
             z-index: 1;
         }
 
-        /* Overlay lớp nền tối mà không làm mờ dải sắc màu */
         .overlay {
             position: fixed;
             top: 0;
@@ -172,10 +171,16 @@
             0% { transform: translateY(0); opacity: 1; }
             100% { transform: translateY(100vh); opacity: 1; }
         }
+
+        /* Thêm hiệu ứng blur cho phần nội dung */
+        .blurred {
+            filter: blur(5px);
+            pointer-events: none; /* Ngăn tương tác với nội dung khi bị mờ */
+        }
     </style>
 </head>
 <body>
-    <div class="background-content">
+    <div class="background-content" id="background-content">
         <div class="heart-container">
             <div class="text">Chúc mừng sinh nhật vợ yêuuuuuuuuu ❤</div>
             <div class="heart"></div>
@@ -191,15 +196,43 @@
     </div>
 
     <script>
+        let confettiCreated = false;
+        let audio = new Audio('nhac.mp3'); // Thay bằng đường dẫn chính xác đến tệp âm thanh
+
         function openPopup() {
             document.getElementById('overlay').style.display = 'block';
             document.getElementById('popup').classList.add('show');
-            createConfetti();
+
+            // Thêm class để làm mờ mọi thứ ngoại trừ dải màu và nội dung thư
+            document.getElementById('background-content').classList.add('blurred');
+
+            // Phát nhạc khi mở thư
+            audio.play();
+
+            // Tạo confetti chỉ một lần
+            if (!confettiCreated) {
+                createConfetti();
+                confettiCreated = true;
+            }
         }
 
         function closePopup() {
             document.getElementById('overlay').style.display = 'none';
             document.getElementById('popup').classList.remove('show');
+
+            // Xóa class để khôi phục nội dung
+            document.getElementById('background-content').classList.remove('blurred');
+
+            // Dừng nhạc khi đóng thư
+            audio.pause();
+            audio.currentTime = 0;
+
+            // Xóa các confetti hiện có
+            const confettiElements = document.querySelectorAll('.confetti');
+            confettiElements.forEach(confetti => confetti.remove());
+            
+            // Cho phép tạo confetti lần tiếp theo khi mở thư
+            confettiCreated = false;
         }
 
         function getRandomColor() {
@@ -208,12 +241,8 @@
         }
 
         function createConfetti() {
-            let count = 0;
-            const maxConfetti = 10;
-
-            function addConfetti() {
-                if (count >= maxConfetti) return;
-
+            const maxConfetti = 50;
+            for (let i = 0; i < maxConfetti; i++) {
                 const confetti = document.createElement('div');
                 confetti.classList.add('confetti');
                 confetti.style.left = `${Math.random() * 100}vw`;
@@ -221,13 +250,9 @@
                 confetti.style.animationDuration = `${Math.random() * 2 + 3}s`;
                 document.body.appendChild(confetti);
 
+                // Xóa confetti sau khi animation kết thúc
                 confetti.addEventListener('animationend', () => confetti.remove());
-
-                count++;
-                requestAnimationFrame(addConfetti);
             }
-
-            requestAnimationFrame(addConfetti);
         }
     </script>
 </body>
